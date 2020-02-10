@@ -12,11 +12,12 @@ const alterFile = (file) => {
   fs.readFile( file, (err, data) => {
     if(err) { throw err; }
 
-    client.write('hello');
+    client.write(`read file: ${file} content: ${data}`);
 
     let text = data.toString().toUpperCase();
     fs.writeFile( file, Buffer.from(text), (err, data) => {
       if(err) { throw err; }
+      client.write(`${file} saved`)
       console.log(`${file} saved`);
     });
   });

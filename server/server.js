@@ -1,26 +1,32 @@
 'use strict';
 
 const net = require('net');
-const uuid = require('uuid/v1');
-
-const port = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3001;
 const server = net.createServer();
 
+let socketPool = {};
 
-// let socketPool = {};
+server.on('connection', (socket) => {
+  const id = `Socket-${Math.random()}`;
+  socketPool[id] = socket;
+  socket.on('data', (buffer) => stringTheBuffer(buffer));
+  socket.on('end', () => delete socketPool[id]);
+  socket.on('error', (e) => console.error('Socket ERR:', e));
+});
 
-// server.on('connection', (socket) => {
-    //   const id = `Socket-${uuid()}`;
-    //   socketPool[id] = socket;
-    server.on('data', (buffer) => showEvent(buffer));
-    server.on('close', () => {
-        // delete socketPool[id];
-    });
-    // });
-    
-    let showEvent = (buffer) => {
-        let text = buffer.toString().trim();
-        return text;
-};
+function stringTheBuffer(buffer) {
+  let message = buffer.toString();
+//   console.log(' message : ', message);
+  broadcast(message);
+}
 
-server.listen(port, () => console.log(`Server up on ${port}`) );
+function broadcast(message) {
+  let payload = JSON.stringify(message);
+  for (let socket in socketPool) {
+    socketPool[socket].write(payload);
+  }
+}
+
+server.listen(PORT, () => {
+  console.log(`listening on the coolest port: ${PORT}`);
+});
