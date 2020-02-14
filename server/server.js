@@ -1,4 +1,4 @@
-'use strict';
+
 
 const net = require('net');
 const PORT = process.env.PORT || 3001;
@@ -16,7 +16,7 @@ server.on('connection', (socket) => {
 
 function stringTheBuffer(buffer) {
   let message = buffer.toString();
-//   console.log(' message : ', message);
+  //   console.log(' message : ', message);
   broadcast(message);
 }
 

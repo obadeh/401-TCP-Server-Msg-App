@@ -1,4 +1,4 @@
-'use strict';
+
 const net = require('net');
 const client = new net.Socket();
 client.connect(3001, 'localhost', () => {});
@@ -17,7 +17,7 @@ const alterFile = (file) => {
     let text = data.toString().toUpperCase();
     fs.writeFile( file, Buffer.from(text), (err, data) => {
       if(err) { throw err; }
-      client.write(`${file} saved`)
+      client.write(`${file} saved`);
       console.log(`${file} saved`);
     });
   });

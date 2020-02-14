@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-console */
 'use strict';
 
 const net = require('net');
@@ -15,4 +17,4 @@ client.on('data', (data) => {
 
 client.on('close', () => {
   console.log('connection closed...');
-})
+});
